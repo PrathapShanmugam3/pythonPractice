@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.angular/
+src/programs/
+src/main.ts
+src/registry.ts
+outputs.json
