@@ -17,10 +17,23 @@ REPO = Path(__file__).resolve().parent.parent
 
 
 def all_guides():
+    from content import extras_backend, extras_data, extras_js, extras_node, extras_tools
+    from content._dsl import apply_extras
+    extras = {
+        "JavaScript": extras_js.JAVASCRIPT, "TypeScript": extras_js.TYPESCRIPT, "React": extras_js.REACT,
+        "Next.js": extras_node.NEXTJS, "Node.js": extras_node.NODEJS, "Express.js": extras_node.EXPRESS,
+        "Java": extras_backend.JAVA, "Spring Boot": extras_backend.SPRINGBOOT,
+        "Python": extras_backend.PYTHON, "FastAPI": extras_backend.FASTAPI,
+        "MySQL": extras_data.MYSQL, "PostgreSQL": extras_data.POSTGRESQL, "MongoDB": extras_data.MONGODB,
+        "Git": extras_tools.GIT, "GitLab": extras_tools.GITLAB, "GitHub": extras_tools.GITHUB,
+        "DevOps": extras_tools.DEVOPS, "AI ML": extras_tools.AIML,
+    }
     out = []
     for m in pkgutil.iter_modules(content.__path__):
         if m.name.startswith("guides_"):
-            out += importlib.import_module(f"content.{m.name}").GUIDES
+            for g in importlib.import_module(f"content.{m.name}").GUIDES:
+                apply_extras(g["topics"], extras[g["name"]])
+                out.append(g)
     from content import angular_guide
     out.insert(0, angular_guide.build())
     return out

@@ -52,6 +52,7 @@ li {{ margin-bottom: 3pt; }}
 .tree li::before {{ content: ''; position: absolute; top: 0; left: 50%; height: 12pt; border-left: 1.5px solid {ACCENT}; }}
 .tree > ul > li::before {{ display: none; }}
 .tree > ul > li {{ padding-top: 0; }}
+.lab {{ font-weight: 700; color: {ACCENT}; margin: 8pt 0 2pt; font-size: 9.5pt; text-transform: uppercase; letter-spacing: .5px; break-after: avoid; }}
 .cap {{ color: #666; font-size: 8.8pt; margin-top: 6pt; }}
 table.road {{ width: 100%; border-collapse: collapse; margin-bottom: 8pt; }}
 table.road td {{ padding: 4pt 6pt; border-bottom: 1px solid #e4e4ea; vertical-align: top; }}
@@ -125,6 +126,24 @@ def diagram_html(d):
     return f'<div class="diagram">{body}{cap}</div>'
 
 
+def realworld_html(t):
+    ta = t.get("real_ta") or "".join(f"<p>{inline(x)}</p>" for x in t.get("tamil", []))
+    if isinstance(ta, list):
+        ta = "".join(f"<p>{inline(x)}</p>" for x in ta)
+    en = f'<div class="tamil" style="background:#eef6ff;border-color:#b6d4f5"><b>English</b>{paras(t["real_en"])}</div>' \
+        if t.get("real_en") else ""
+    return en + f'<div class="tamil ta" style="margin-top:6pt"><b>தமிழ்</b>{ta if ta.startswith("<p>") else paras(ta)}</div>'
+
+
+def lists_html(t, start_letter=None):
+    """Pros / Cons / New features blocks (only the ones that exist)."""
+    out = []
+    for key, title in (("pros", "Pros"), ("cons", "Cons"), ("new", "Advanced / New Features")):
+        if t.get(key):
+            out.append((title, "<ul>" + "".join(f"<li>{inline(x)}</li>" for x in t[key]) + "</ul>"))
+    return out
+
+
 def topic_html(subject, num, t, programs, outputs):
     """programs: list of program dicts for this topic; outputs: dict key -> output."""
     color = LEVEL_COLORS[t["level"]]
@@ -161,13 +180,16 @@ def topic_html(subject, num, t, programs, outputs):
         out_main, out_note, steps = ex["output"], "Expected output:", ""
     h.append("<h2>e. Output</h2>")
     h.append(f"<p>{out_note}</p>{steps}<pre class='out'>{html.escape(out_main)}</pre>")
-    h.append('<h2>f. Real-World Example in Tamil (தமிழ் உதாரணம்)</h2>')
-    h.append(f'<div class="tamil ta">{paras(t["tamil"])}</div>')
-    h.append("<h2>g. Common Mistakes</h2><ul>" + "".join(f"<li>{inline(m)}</li>" for m in t["mistakes"]) + "</ul>")
-    h.append("<h2>h. Interview Questions</h2>" + "".join(
+    h.append('<h2>f. Real-World Example (English + தமிழ்)</h2>')
+    h.append(realworld_html(t))
+    letters = iter("ghijklm")
+    for title, body in lists_html(t):
+        h.append(f"<h2>{next(letters)}. {title}</h2>{body}")
+    h.append(f"<h2>{next(letters)}. Common Mistakes</h2><ul>" + "".join(f"<li>{inline(m)}</li>" for m in t["mistakes"]) + "</ul>")
+    h.append(f"<h2>{next(letters)}. Interview Questions</h2>" + "".join(
         f'<div class="qa"><div class="q">Q{i}. {inline(q)}</div><div>{inline(a)}</div></div>'
         for i, (q, a) in enumerate(t["interview"], 1)))
-    h.append("<h2>i. Practice Exercises</h2><ol>" + "".join(f"<li>{inline(e)}</li>" for e in t["exercises"]) + "</ol>")
+    h.append(f"<h2>{next(letters)}. Practice Exercises</h2><ol>" + "".join(f"<li>{inline(e)}</li>" for e in t["exercises"]) + "</ol>")
     return page("\n".join(h))
 
 

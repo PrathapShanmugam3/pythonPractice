@@ -1,7 +1,7 @@
 """One combined 'Zero to Master' PDF per subject (all topics, grouped by level)."""
 import html
 
-from .render import LEVEL_COLORS, code_block, inline, page, paras
+from .render import LEVEL_COLORS, code_block, inline, lists_html, page, paras, realworld_html
 
 LEVELS = ["Beginner", "Intermediate", "Advanced", "Master"]
 
@@ -35,9 +35,16 @@ def guide_html(g):
             h.append(f'<div class="lvl" style="background:{LEVEL_COLORS[cur]};page-break-before:always">'
                      f"{cur} Level</div>")
         h.append(f'<h2>{n:02d}. {html.escape(t["title"])}</h2>')
-        h.append(paras(t["text"]))
+        h.append('<p class="lab">Definition</p>' + paras(t["text"]))
+        lang = t.get("lang", g["lang"])
+        if t.get("syntax"):
+            h.append('<p class="lab">Syntax</p>' + code_block(t["syntax"], t.get("syntax_lang", lang)))
         if t.get("code"):
-            h.append(code_block(t["code"], t.get("lang", g["lang"])))
+            h.append('<p class="lab">Example</p>' + code_block(t["code"], lang))
+        if t.get("real_en"):
+            h.append('<p class="lab">Real-World Example (English + தமிழ்)</p>' + realworld_html(t))
+        for title, body in lists_html(t):
+            h.append(f'<p class="lab">{title}</p>{body}')
         if t.get("mistakes"):
             h.append("<p><b>Common mistakes</b></p><ul>" + "".join(f"<li>{inline(m)}</li>" for m in t["mistakes"]) + "</ul>")
         if t.get("interview"):

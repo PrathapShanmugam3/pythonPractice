@@ -1,5 +1,7 @@
 """Angular combined guide: detailed Beginner/Intermediate topics + condensed Advanced/Master topics."""
-from ._dsl import topics
+from ._dsl import apply_extras, topics
+from .angular_extras import EXTRAS
+from . import angular as _angular  # applies extras to the detailed topics
 from .angular_beginner import TOPICS as B
 from .angular_intermediate import TOPICS as I
 
@@ -91,6 +93,9 @@ PROJECTS = [
 ]
 
 
+apply_extras(EXTRA, EXTRAS[len(B) + len(I):])
+
+
 def build():
     detailed = []
     for t in B + I:
@@ -99,7 +104,8 @@ def build():
             "level": t["level"], "title": t["title"], "text": t["definition"],
             "code": (main["code"] if main else t.get("syntax", "")),
             "lang": "typescript", "mistakes": t["mistakes"][:3], "interview": t["interview"][:3],
-            "exercises": t["exercises"],
+            "exercises": t["exercises"], "syntax": t.get("syntax", ""), "syntax_lang": t.get("syntax_lang", "typescript"),
+            "real_en": t["real_en"], "tamil": t["tamil"], "pros": t["pros"], "cons": t["cons"], "new": t["new"],
         })
     return {"name": "Angular", "lang": "typescript", "topics": detailed + EXTRA,
             "interview": INTERVIEW, "projects": PROJECTS}

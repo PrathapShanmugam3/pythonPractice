@@ -9,3 +9,20 @@ def topics(rows):
 
 def G(name, lang, rows, interview, projects):
     return {"name": name, "lang": lang, "topics": topics(rows), "interview": interview, "projects": projects}
+
+
+def _split(s):
+    return [x.strip() for x in s.split(" | ") if x.strip()]
+
+
+def apply_extras(topic_list, extras):
+    """extras: (syntax, real_en, real_ta, pros, cons, new) aligned with topic_list."""
+    assert len(topic_list) == len(extras), (len(topic_list), len(extras))
+    for t, (syntax, en, ta, pros, cons, new) in zip(topic_list, extras):
+        if syntax:
+            t["syntax"] = syntax
+        t["real_en"] = en
+        if ta:
+            t["real_ta"] = ta
+        t["pros"], t["cons"], t["new"] = _split(pros), _split(cons), _split(new)
+    return topic_list
