@@ -1,0 +1,36 @@
+from common import *
+NUM, FILE = "08", "08_Natural_Language_Processing"
+TITLE = "Natural Language Processing (NLP)"
+DESC = "Text processing, representations, classic NLP tasks, and the road to transformers."
+TOPICS = [
+ T("Text preprocessing: tokenisation, lowercasing, stop words, stemming, lemmatisation", B, "Break text into tokens, normalise, remove noise; stemming chops suffixes, lemmatisation returns dictionary form.", "Text clean: tokenize, stopwords remove, stemming/lemmatization.",
+   "import re\nt=re.sub(r'[^a-z ]','','Hello, NLP World!'.lower()).split();print(t)"),
+ T("Bag of Words, TF-IDF and n-grams", B, "Represent documents as sparse word-count vectors; TF-IDF down-weights common words; n-grams capture local order.", "BoW, TF-IDF - text-a numbers-a maathum.",
+   "from sklearn.feature_extraction.text import TfidfVectorizer\nv=TfidfVectorizer();X=v.fit_transform(['ai is fun','ml is fun too']);print(v.get_feature_names_out(),X.toarray().round(2))"),
+ T("Text classification with classical ML", B, "TF-IDF + Logistic Regression / Naive Bayes / SVM is a strong baseline for sentiment, spam and topic tagging.", "TF-IDF + Logistic Regression strong baseline.",
+   "from sklearn.pipeline import make_pipeline\nfrom sklearn.feature_extraction.text import TfidfVectorizer\nfrom sklearn.linear_model import LogisticRegression\nm=make_pipeline(TfidfVectorizer(),LogisticRegression()).fit(['good','bad','great','awful'],[1,0,1,0]);print(m.predict(['good movie']))"),
+ T("Word embeddings: Word2Vec, GloVe, FastText", I, "Dense vectors where similar words are close; king - man + woman ~ queen. Static (one vector per word).", "Word2Vec: words-a vectors-a maathum. Similar words nearby.",
+   "from gensim.models import Word2Vec\nm=Word2Vec([['i','love','ai'],['i','love','ml']]*50,vector_size=20,min_count=1);print(m.wv.most_similar('ai')[:2])"),
+ T("Language models: n-gram, neural LM, perplexity", I, "Predict the next token; perplexity measures how surprised the model is. Neural LMs replaced n-grams.", "Language model = next word predict.",
+   "import collections\nbi=collections.Counter(zip('abab'.split(),'abab'.split()[1:]))"),
+ T("Sequence labelling: POS tagging, NER, chunking", I, "Assign a label per token (CRF, BiLSTM-CRF, transformers).", "NER: names, places, orgs identify.",
+   "import spacy;nlp=spacy.load('en_core_web_sm');print([(t.text,t.pos_) for t in nlp('AI is great')])"),
+ T("Parsing, coreference, semantic similarity, topic modelling (LDA, BERTopic)", I, "Syntactic dependency parsing; resolving pronouns; embedding similarity; discovering topics unsupervised.", "Topic modelling: LDA, BERTopic.",
+   "from sklearn.decomposition import LatentDirichletAllocation\nfrom sklearn.feature_extraction.text import CountVectorizer\nX=CountVectorizer().fit_transform(['cat dog','dog bone','stock market','market price']);print(LatentDirichletAllocation(2,random_state=0).fit_transform(X).round(2))"),
+ T("Machine translation, summarisation, question answering", A, "Seq2seq and Transformer models (MarianMT, T5, BART, mT5). Extractive vs abstractive summarisation; extractive vs generative QA.", "Translation, summary, QA tasks.",
+   "from transformers import pipeline\nprint(pipeline('summarization')('Long text ... '*30,max_length=30))"),
+ T("Tokenisation for transformers: BPE, WordPiece, SentencePiece", I, "Subword tokenisers handle rare words and any language. Vocabulary is learnt from data.", "Subword tokenization - BPE, WordPiece.",
+   "from transformers import AutoTokenizer\nt=AutoTokenizer.from_pretrained('bert-base-uncased');print(t.tokenize('unbelievable'))"),
+ T("BERT family and fine-tuning for NLP tasks", A, "Encoder-only masked language models (BERT, RoBERTa, DistilBERT, DeBERTa). Fine-tune with a classification head for sentiment, NER, QA.", "BERT bidirectional encoder. Fine-tune pannalam.",
+   "from transformers import AutoModelForSequenceClassification as M,AutoTokenizer as Tk\nt=Tk.from_pretrained('distilbert-base-uncased');m=M.from_pretrained('distilbert-base-uncased',num_labels=2)\nprint(m(**t('hello',return_tensors='pt')).logits)"),
+ T("GPT-style decoders and T5/BART encoder-decoders", A, "Decoder-only autoregressive models generate text; encoder-decoder models suit translation/summarisation.", "GPT = decoder, T5/BART = encoder-decoder.",
+   "from transformers import pipeline\ng=pipeline('text-generation','gpt2');print(g('AI will',max_new_tokens=20)[0]['generated_text'])"),
+ T("Sentence embeddings and semantic search", I, "Encode sentences into vectors with sentence-transformers and search by cosine similarity - the basis of RAG.", "Semantic search: embeddings + cosine similarity.",
+   "from sentence_transformers import SentenceTransformer,util\nm=SentenceTransformer('all-MiniLM-L6-v2')\ne=m.encode(['cat on mat','dog in yard','stock prices']);print(util.cos_sim(e[0],e))"),
+ T("Evaluation: BLEU, ROUGE, METEOR, BERTScore, perplexity, human eval", A, "Overlap metrics for generation, embedding-based metrics, and human or LLM-as-judge evaluation.", "BLEU/ROUGE generation evaluate panna.",
+   "from nltk.translate.bleu_score import sentence_bleu\nprint(sentence_bleu([['the','cat']],['the','cat']))"),
+ T("Multilingual and Indian-language NLP (Tamil, Hindi)", I, "Use multilingual models (mBERT, XLM-R, IndicBERT, MuRIL, AI4Bharat IndicTrans2). Handle Unicode, transliteration and code-mixed (Tanglish) text.", "Tamil NLP: IndicBERT, IndicTrans2, AI4Bharat. Tanglish code-mixed text special.",
+   "from transformers import pipeline\n# pipeline('fill-mask','xlm-roberta-base')('Chennai is the <mask> of Tamil Nadu.')", refs=[("AI4Bharat", "https://ai4bharat.iitm.ac.in")]),
+ T("Speech: ASR (Whisper), TTS and voice assistants", A, "Speech-to-text with Whisper/wav2vec2; text-to-speech with VITS/XTTS; pipelines for voice bots.", "Whisper speech-to-text; TTS.",
+   "import whisper\n# print(whisper.load_model('base').transcribe('a.mp3')['text'])"),
+]

@@ -1,0 +1,38 @@
+from common import *
+NUM, FILE = "11", "11_MLOps_Deployment_and_Cloud"
+TITLE = "MLOps, Deployment & Cloud"
+DESC = "Take models from notebook to reliable production systems."
+TOPICS = [
+ T("ML system lifecycle and MLOps maturity", B, "Data -> training -> validation -> deployment -> monitoring -> retraining. MLOps applies DevOps practices (automation, versioning, CI/CD) to ML.", "MLOps = ML + DevOps. Automation, versioning, monitoring.",
+   yt_q="mlops explained"),
+ T("Project structure, configs and reproducibility", B, "Use src/ layout, config files (YAML/Hydra), requirements/poetry/uv lock files, fixed seeds, Makefile.", "Clean project structure, config files, requirements.txt.",
+   "proj/\n  data/  notebooks/  src/  tests/  configs/  requirements.txt  README.md"),
+ T("Experiment tracking & model registry (MLflow, W&B)", I, "Log params, metrics, artefacts, code version; compare runs; promote models through staging to production in a registry.", "MLflow-la experiments track pannunga.",
+   "import mlflow\nmlflow.set_experiment('demo')\nwith mlflow.start_run():\n    mlflow.log_param('C',1);mlflow.log_metric('f1',.9)"),
+ T("Data & model versioning (DVC, Git LFS, lakeFS)", I, "Version large datasets and models alongside code for exact reproducibility.", "DVC data version pannum.",
+   "dvc init\ndvc add data/train.csv\ngit add data/train.csv.dvc .gitignore\ngit commit -m 'track data'"),
+ T("Serving models with FastAPI / Flask", B, "Load model once at start-up; validate input with Pydantic; return predictions as JSON; add health endpoint.", "FastAPI-la model serve.",
+   "from fastapi import FastAPI\nfrom pydantic import BaseModel\nimport joblib\napp=FastAPI();m=joblib.load('m.joblib')\nclass In(BaseModel): x:list[float]\n@app.post('/predict')\ndef p(i:In): return {'y':int(m.predict([i.x])[0])}"),
+ T("Docker and containers", I, "Package code + dependencies into an image so it runs identically anywhere. Write small, cached, non-root images.", "Docker - everywhere same-a run aagum.",
+   "# Dockerfile\nFROM python:3.11-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nCMD [\"uvicorn\",\"app:app\",\"--host\",\"0.0.0.0\",\"--port\",\"8000\"]"),
+ T("Kubernetes, scaling and serverless basics", A, "Deploy containers with Deployments/Services, autoscale, GPU nodes; serverless (Lambda, Cloud Run) for light workloads.", "Kubernetes scale panna.",
+   yt_q="kubernetes for machine learning"),
+ T("CI/CD with GitHub Actions", I, "Run linters, tests and image builds on each push; deploy automatically after checks pass.", "GitHub Actions - auto test & deploy.",
+   "# .github/workflows/ci.yml\non: [push]\njobs:\n  t:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with: {python-version: '3.11'}\n      - run: pip install -r requirements.txt pytest && pytest"),
+ T("Workflow orchestration: Airflow, Prefect, Kubeflow, Dagster", A, "Schedule and monitor data/training pipelines as DAGs.", "Pipelines schedule panna Airflow/Prefect.",
+   yt_q="apache airflow tutorial"),
+ T("Feature stores and data pipelines (Feast, dbt, Kafka, Spark)", A, "Share consistent features between training and serving; batch vs streaming pipelines.", "Feature store - training/serving same features.",
+   yt_q="feature store feast explained"),
+ T("Cloud platforms: AWS SageMaker, GCP Vertex AI, Azure ML, Hugging Face Spaces", I, "Managed training, hosting, pipelines, GPUs. Learn IAM, storage (S3/GCS), compute, cost control.", "Cloud basics: S3, EC2, SageMaker, Vertex AI.",
+   yt_q="aws sagemaker tutorial"),
+ T("Monitoring: drift, data quality, performance, logging", A, "Track input/feature drift, prediction drift, latency, errors and business KPIs; alerting and retraining triggers (Evidently, Prometheus, Grafana).", "Model production-la drift aaguthaa-nu monitor.",
+   "from evidently.report import Report\nfrom evidently.metric_preset import DataDriftPreset\n# Report([DataDriftPreset()]).run(reference_data=a,current_data=b)"),
+ T("Testing ML systems and A/B tests in production", A, "Unit tests for transforms, data validation tests, model behaviour tests, shadow deployment, canary and online A/B experiments.", "Shadow, canary, A/B test.",
+   yt_q="testing machine learning systems"),
+ T("Security, privacy, fairness and governance", A, "Secrets management, PII handling, differential privacy, federated learning, bias audits, model cards, audit logs.", "Security, privacy, fairness.",
+   yt_q="responsible ai fairness bias audit"),
+ T("Edge & mobile deployment: TFLite, CoreML, ONNX, WebAssembly", A, "Quantise and convert models for phones, browsers and microcontrollers (TinyML).", "Mobile / edge deploy.",
+   yt_q="tinyml tflite deployment"),
+ T("LLMOps: prompt versioning, tracing, cost & latency control", A, "Trace calls (Langfuse, LangSmith), cache responses, batch, route to cheaper models, guardrails, eval in CI.", "LLMOps - prompts, traces, cost control.",
+   yt_q="llmops langfuse tracing"),
+]
