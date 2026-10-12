@@ -1,0 +1,30 @@
+@page { size: A4; margin: 18mm 16mm 20mm 16mm;
+  @bottom-center { content: "React & React Native - Zero to Master  |  Page " counter(page); font: 8pt sans-serif; color: #777; } }
+@page :first { @bottom-center { content: ""; } }
+body { font-family: "DejaVu Sans", "Noto Sans", sans-serif; font-size: 10pt; line-height: 1.5; color: #1b1f24; }
+h1 { font-size: 24pt; color: #0b3d91; margin: 0 0 8pt; }
+h1.part, h2 { page-break-before: always; }
+h1.part { background: #0b3d91; color: #fff; padding: 14pt 12pt; border-radius: 4pt; font-size: 20pt; }
+h2 { font-size: 16pt; color: #0b3d91; border-bottom: 2px solid #0b3d91; padding-bottom: 3pt; }
+h3 { font-size: 14pt; color: #fff; background: #1f6feb; padding: 5pt 8pt; border-radius: 3pt; margin-top: 22pt; page-break-after: avoid; }
+h4 { font-size: 10.5pt; color: #0b3d91; margin: 12pt 0 3pt; page-break-after: avoid; text-transform: uppercase; letter-spacing: .4pt; }
+h4:nth-of-type(1) { color: #b45309; }
+p, li { orphans: 3; widows: 3; }
+pre { background: #f4f6f8; border: 1px solid #d8dee4; border-left: 3px solid #1f6feb; border-radius: 3pt; padding: 7pt 9pt; font-size: 8pt; line-height: 1.4; white-space: pre-wrap; word-wrap: break-word; page-break-inside: avoid; }
+code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.8pt; background: #eef1f4; padding: 0 2pt; border-radius: 2pt; }
+pre code { background: none; padding: 0; font-size: 8pt; }
+table { border-collapse: collapse; width: 100%; margin: 8pt 0; font-size: 9pt; page-break-inside: avoid; }
+th { background: #dbe5f7; text-align: left; } th, td { border: 1px solid #c5cdd6; padding: 3pt 6pt; vertical-align: top; }
+blockquote { border-left: 3px solid #f59e0b; background: #fff7e6; margin: 8pt 0; padding: 4pt 10pt; }
+hr { border: none; border-top: 1px dashed #bbb; margin: 14pt 0 0; }
+.pb { page-break-after: always; }
+.title-page { text-align: center; padding-top: 70mm; }
+.title-page h1 { font-size: 40pt; color: #0b3d91; }
+.tp-small { font-size: 12pt; letter-spacing: 3pt; text-transform: uppercase; color: #666; }
+.tp-sub { font-size: 15pt; color: #333; margin: 10pt 30pt 30pt; }
+.tp-meta { font-size: 11pt; color: #555; line-height: 1.9; }
+.tp-note { margin-top: 50mm; font-size: 10pt; color: #888; }
+h2.toc-title { page-break-before: auto; }
+h3 code, h1 code, h2 code { background: transparent; color: inherit; font-size: inherit; }
+pre > code.sourceCode > span { display: inline; text-indent: 0; padding-left: 0; }
+pre > code.sourceCode { white-space: pre-wrap; }
