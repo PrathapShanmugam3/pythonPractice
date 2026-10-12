@@ -1,0 +1,36 @@
+from common import *
+NUM, FILE = "07", "07_Computer_Vision"
+TITLE = "Computer Vision"
+DESC = "From pixels and filters to detection, segmentation, OCR, video and vision-language models."
+TOPICS = [
+ T("Images as arrays: pixels, channels, colour spaces", B, "An image is an H x W x C array. Colour spaces: RGB, BGR (OpenCV), HSV, grayscale.", "Image = pixel array. OpenCV BGR, matplotlib RGB - mix aaga koodadhu.",
+   "import cv2,numpy as np\nimg=np.zeros((100,100,3),np.uint8);img[:,:,2]=255\nprint(img.shape,cv2.cvtColor(img,cv2.COLOR_BGR2HSV)[0,0])"),
+ T("Image processing: resize, crop, blur, threshold, morphology", B, "Gaussian/median blur, binary & adaptive thresholding, erosion/dilation, histogram equalisation.", "Resize, blur, threshold - preprocessing basics.",
+   "import cv2,numpy as np\ng=(np.random.rand(50,50)*255).astype('uint8')\nb=cv2.GaussianBlur(g,(5,5),0);_,t=cv2.threshold(b,127,255,cv2.THRESH_BINARY)"),
+ T("Edges, contours, Hough transform, feature descriptors (SIFT/ORB)", I, "Canny edges, findContours, Hough lines/circles, keypoints and descriptors for matching and stitching.", "Edge, contour, SIFT/ORB features.",
+   "import cv2\norb=cv2.ORB_create()\n# kp,des=orb.detectAndCompute(gray,None)"),
+ T("Image classification with CNNs", B, "Train a CNN or fine-tune a pretrained backbone (ResNet, EfficientNet, ViT) on labelled images.", "Image classification: CNN / transfer learning.",
+   "import torchvision.transforms as T\ntf=T.Compose([T.Resize(224),T.ToTensor(),T.Normalize([.485,.456,.406],[.229,.224,.225])])"),
+ T("Data augmentation", B, "Flips, crops, rotations, colour jitter, MixUp, CutMix, RandAugment (Albumentations) improve generalisation.", "Augmentation data increase panni overfitting kuraikkum.",
+   "import albumentations as A\naug=A.Compose([A.HorizontalFlip(),A.RandomBrightnessContrast(),A.Rotate(15)])"),
+ T("Object detection: R-CNN family, SSD, YOLO, DETR", I, "Predict bounding boxes + classes. Two-stage (Faster R-CNN) vs one-stage (YOLO, SSD) vs transformer (DETR). Metrics: IoU, mAP, NMS.", "Object detection: box + class. YOLO real-time.",
+   "from ultralytics import YOLO\nm=YOLO('yolov8n.pt')\nr=m('https://ultralytics.com/images/bus.jpg');print(r[0].boxes.cls)"),
+ T("Semantic, instance and panoptic segmentation (U-Net, Mask R-CNN, SAM)", A, "Pixel-level labelling. U-Net for medical imaging; Mask R-CNN for instances; Segment Anything (SAM) for promptable segmentation.", "Segmentation: ovvoru pixel-um classify. U-Net, SAM.",
+   yt_q="unet segmentation pytorch tutorial"),
+ T("Face detection and recognition", I, "Detect faces (Haar, MTCNN, RetinaFace) and recognise via embeddings (FaceNet, ArcFace). Consider privacy/bias.", "Face detect + embeddings. Privacy care pannunga.",
+   "import cv2\nc=cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalface_default.xml')"),
+ T("OCR and document AI", I, "Extract text with Tesseract, EasyOCR, PaddleOCR, TrOCR; layout models (LayoutLM, Donut) for invoices and forms.", "Image-la irundhu text edukka OCR.",
+   "import pytesseract\nfrom PIL import Image\n# print(pytesseract.image_to_string(Image.open('a.png')))"),
+ T("Pose estimation, tracking, optical flow, video understanding", A, "MediaPipe/OpenPose keypoints; trackers (SORT, DeepSORT, ByteTrack); optical flow; video transformers.", "Pose, tracking, video analysis.",
+   "import mediapipe as mp\nhands=mp.solutions.hands.Hands()"),
+ T("Vision Transformers (ViT), CLIP and vision-language models", A, "ViT splits images into patches and applies a Transformer. CLIP aligns images and text for zero-shot classification; VLMs (LLaVA, GPT-4V style) answer questions about images.", "ViT patches use pannum. CLIP image-text match.",
+   "from transformers import pipeline\nz=pipeline('zero-shot-image-classification')\n# z('a.jpg',candidate_labels=['cat','dog'])"),
+ T("3D vision, depth, SLAM, point clouds, NeRF", A, "Stereo/monocular depth, SLAM for robots, PointNet, NeRF and Gaussian splatting for 3D reconstruction.", "3D, depth, SLAM, NeRF - advanced.",
+   yt_q="nerf explained 3d reconstruction"),
+ T("Image generation and editing (GAN, diffusion, inpainting, ControlNet)", A, "Text-to-image, inpainting, super-resolution, style transfer.", "Image generation: diffusion, inpainting, super-resolution.",
+   yt_q="stable diffusion diffusers tutorial"),
+ T("Medical, satellite, industrial and autonomous-driving vision", A, "Domain challenges: scarce labels, class imbalance, 3D/volumetric data, strict safety requirements.", "Domain-specific vision: medical, satellite, driving.",
+   yt_q="computer vision applications medical satellite"),
+ T("Deploying vision models: ONNX, TensorRT, TFLite, edge devices", A, "Convert and optimise for Jetson, mobile, browsers (TF.js / ONNX Web).", "Edge devices-la deploy: TFLite, ONNX, TensorRT.",
+   "# model.export(format='onnx')  # ultralytics"),
+]
